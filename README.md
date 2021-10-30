@@ -10,6 +10,7 @@ python manage.py migrate
 
 ## open settings.py and set your redis configuration
 
+## After that it's time to (make) up your redis server
 example:
 
 docker run -p 5000:5000 -d redis:5
