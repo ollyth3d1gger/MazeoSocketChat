@@ -25,7 +25,7 @@ python manage.py runserver 0.0.0.0:8000
 
 python manage.py createsuperuser
 
---Other users can signup with through the interface
+--Other users can signup through the interface
 
 ## Finally you need to add chat from admin panel 
 
