@@ -1,0 +1,155 @@
+{%load static%}
+<header id="header" class="header">
+    <div class="header-top bg-theme-color-2 sm-text-center p-0">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="widget no-border m-0">
+              <ul class="list-inline font-13 sm-text-center mt-5">
+                <li>
+                  <a class="text-white" href="{% url 'faq'%}">SSS</a>
+                </li>
+                <li class="text-white">|</li>
+                <li>
+                  <a class="text-white" href="{% url 'help'%}">Yardım Talebi</a>
+                </li>
+                <li class="text-white">|</li>
+                
+                  {% if user.is_authenticated %}
+
+
+                  <li role="presentation" class="dropdown">
+
+
+                              <a style="color: white" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                  {{ user.username }} <span class="caret"></span>
+                              </a>
+                              <ul class="dropdown-menu">
+                                  
+                                      <li>
+                                          <a href="{% url 'dashboard' %}">Yönetim Paneli</a>
+                                      </li>
+                                  
+                                  <li>
+                                      <a href="{% url 'logout' %}">Çıkış Yap</a>
+                                  </li>
+                              </ul>
+
+
+
+                  </li>
+              {%else%}
+                  <li>
+                      <a class="text-white" href="{% url 'login' %}">Giriş Yap</a>
+                  </li>
+
+              {%endif%} 
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="widget m-0 pull-right sm-pull-none sm-text-center">
+              <ul class="list-inline pull-right">
+                <li class="mb-0 pb-0">
+                  <div class="top-dropdown-outer pt-5 pb-10">
+                    <a class="top-cart-link has-dropdown text-white text-hover-theme-colored"><i class="fa fa-shopping-cart font-13"></i> ({% if request.session.cart.items %} {% for value in request.session.cart.items %}{% if forloop.last%}{{forloop.counter}}{%endif%}{%endfor%}{% else %}0 {% endif%})</a>
+                    <ul class="dropdown">
+                      <li>
+                        <!-- dropdown cart -->
+                        <div class="dropdown-cart">
+                          <table class="table cart-table-list table-responsive">
+                            <tbody>
+                              {% if request.session.cart.items %}
+                              
+                              
+                              {% for key,value in request.session.cart.items %}
+                
+                                
+                              <tr>
+                                <td><a href="#"><img alt="{{key}}" src="{{value.image}}"></a></td>
+                                <td><a href="#"> {{value.name}}</a></td>
+                                <td>X1</td>
+                                <td>${{value.price}}</td>
+                                <td><a class="close" href="/cart/item_clear/{{value.product_id}}"><i class="fa fa-close font-13"></i></a></td>
+                              </tr>
+                               
+                              {%endfor%}
+                              {% else %}
+                              Sepetiniz Boş
+                              {%endif%}            
+                            </tbody>
+                          </table>
+                         
+                          <div class="cart-btn text-right">
+                              <a class="btn btn-theme-colored btn-xs" href="{% url 'cart_detail'%}"> Sepete Git</a>
+                              
+                          </div>
+                        </div>
+                        <!-- dropdown cart ends -->
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="mb-0 pb-0">
+                  <div class="top-dropdown-outer pt-5 pb-10">
+                    <a class="top-search-box has-dropdown text-white text-hover-theme-colored"><i class="fa fa-search font-13"></i> &nbsp;</a>
+                    <ul class="dropdown">
+                      <li>
+                        <div class="search-form-wrapper">
+                          <form method="get" class="mt-10">
+                            <input type="text" onfocus="if(this.value =='Enter your search') { this.value = ''; }" onblur="if(this.value == '') { this.value ='Enter your search'; }" value="Enter your search" id="searchinput" name="s" class="">
+                            <label><input type="submit" name="submit" value=""></label>
+                          </form>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="widget no-border m-0 mr-15 pull-right flip sm-pull-none sm-text-center">
+              <ul class="styled-icons icon-circled icon-sm pull-right flip sm-pull-none sm-text-center mt-sm-15">
+                <li><a href="{{topconfs.facebook}}"><i class="fa fa-facebook text-white"></i></a></li>
+                <li><a href="{{topconfs.twitter}}"><i class="fa fa-twitter text-white"></i></a></li>
+              
+                <li><a href="{{topconfs.instagram}}"><i class="fa fa-instagram text-white"></i></a></li>
+                <li><a href="{{topconfs.linkedin}}"><i class="fa fa-linkedin text-white"></i></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="header-middle p-0 bg-lightest xs-text-center">
+      <div class="container pt-0 pb-0">
+        <div class="row">
+          <div class="col-xs-12 col-sm-4 col-md-5">
+            <div class="widget no-border m-0">
+              <a class="menuzord-brand pull-left flip xs-pull-center mb-15" href="{% url 'index' %}"><img src="{{ topconfs.logo_normal.url}}" alt=""></a>
+            </div>
+          </div>
+          <div class="col-xs-12 col-sm-4 col-md-4">
+            <div class="widget no-border pull-right sm-pull-none sm-text-center mt-10 mb-10 m-0">
+              <ul class="list-inline">
+                <li><i class="fa fa-phone-square text-theme-colored font-36 mt-5 sm-display-block"></i></li>
+                <li>
+                  <a href="#" class="font-12 text-gray text-uppercase">Bizi Arayın!</a>
+                  <h5 class="font-14 m-0"> {{topconfs.telephone}}</h5>
+                </li>
+              </ul>
+            </div>
+          </div>  
+          <div class="col-xs-12 col-sm-4 col-md-3">
+            <div class="widget no-border pull-right sm-pull-none sm-text-center mt-10 mb-10 m-0">
+              <ul class="list-inline">
+                <li><i class="fa fa-clock-o text-theme-colored font-36 mt-5 sm-display-block"></i></li>
+                <li>
+                  <a href="#" class="font-12 text-gray text-uppercase">Çalışma Saatlerimiz</a>
+                  <h5 class="font-13 text-black m-0"> {{topconfs.work_time}}</h5>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

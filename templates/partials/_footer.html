@@ -1,0 +1,109 @@
+{% load static %}
+<footer id="footer" class="footer divider layer-overlay overlay-dark-9" data-bg-img="http://placehold.it/1920x1280">
+    <div class="container">
+      <div class="row border-bottom">
+        <div class="col-sm-6 col-md-3">
+          <div class="widget dark">
+            <img class="mt-5 mb-20" alt="" src="{{ topconfs.logo_white.url}}">
+            <p>{{contactfield.office_address}}</p>
+            <ul class="list-inline mt-5">
+              <li class="m-0 pl-10 pr-10"> <i class="fa fa-phone text-theme-color-2 mr-5"></i> <a class="text-gray" href="#">{{ topconfs.telephone}}</a> </li>
+              <li class="m-0 pl-10 pr-10"> <i class="fa fa-envelope-o text-theme-color-2 mr-5"></i> <a class="text-gray" href="#">{{contactfield.mail}}</a> </li>
+              <li class="m-0 pl-10 pr-10"> <i class="fa fa-globe text-theme-color-2 mr-5"></i> <a class="text-gray" href="#">www.nubidus.com</a> </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="widget dark">
+            <h4 class="widget-title">Faydalı Linkler</h4>
+            <ul class="list angle-double-right list-border">
+              <li><a href="{% url 'bloglist' %}">Blog</a></li>
+              <li><a href="page-course-list.html">Etkinlikler</a></li>
+              <li><a href="page-pricing-style1.html">Forum</a></li>
+              
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="widget dark">
+            <h4 class="widget-title line-bottom-theme-colored-2">Çalışma Saatlerimiz</h4>
+            <div class="opening-hours">
+              <ul class="list-border">
+                <li class="clearfix"> 
+                  <div class="value pull-right"> {{topconfs.work_time}} </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-30">
+        <div class="col-md-2">
+          <div class="widget dark">
+            <h5 class="widget-title mb-10">Bizi Arayın</h5>
+            <div class="text-gray">
+              {{topconfs.telephone}} <br>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="widget dark">
+            <h5 class="widget-title mb-10">Sosyal Medyada Biz</h5>
+            <ul class="styled-icons icon-bordered icon-sm">
+              <li><a href="{{topconfs.facebook}}"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="{{topconfs.twitter}}"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="{{topconfs.instagram}}"><i class="fa fa-instagram"></i></a></li>
+              <li><a href="{{topconfs.linkedin}}"><i class="fa fa-linkedin"></i></a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-5 col-md-offset-2">
+          <div class="widget dark">
+            <h5 class="widget-title mb-10">Bültene Abone Olun</h5>
+            <!-- Mailchimp Subscription Form Starts Here -->
+            <form id="mailchimp-subscription-form-footer" class="newsletter-form">
+              <div class="input-group">
+                <input type="email" value="" name="EMAIL" placeholder="E-posta Adresi" class="form-control input-lg font-16" data-height="45px" id="mce-EMAIL-footer">
+                <span class="input-group-btn">
+                  <button data-height="45px" class="btn bg-theme-color-2 text-white btn-xs m-0 font-14" type="submit">Abone Ol</button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom bg-black-333">
+      <div class="container pt-20 pb-20">
+        <div class="row">
+          <div class="col-md-6">
+            <p class="font-11 text-black-777 m-0">Copyright &copy;2020 Nubidus. Tüm Hakları Saklıdır</p>
+          </div>
+          <div class="col-md-6 text-right">
+            <div class="widget no-border m-0">
+              {% if footerpages%}
+              <ul class="list-inline sm-text-center mt-5 font-12">
+               {% for footerpage in footerpages%}
+              {% if forloop.last %}
+               <li>
+                  <a href="{% url 'pages' footerpage.slug%}">{{footerpage.title}}</a>
+                </li>
+                {% else %}
+                <li>
+                  <a href="{% url 'pages' footerpage.slug%}">{{footerpage.title}}</a>
+                </li>
+                <li>|</li>
+                {% endif %}
+                {% endfor %}
+              </ul>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <a class="scrollToTop" href="#"><i class="fa fa-angle-up"></i></a>

@@ -1,0 +1,314 @@
+{% extends 'dashboard/mazeo/base.html' %}
+{% load static%}
+{% load l10n %}
+{% load humanize %}
+{% block title %}
+Chat Sayfası
+{% endblock %}
+{% block content %}
+<div class="wrapper" >
+    <div class="sa4d25">
+        <div class="container-fluid">			
+            <div class="row">
+                <div class="col-lg-12">	
+                    <h2 class="st_title"><i class="uil uil-comments"></i> Chat </h2>
+                </div>					
+            </div>				
+            <div class="row">
+                <div class="col-12">
+                    <div class="all_msg_bg">
+                        <div class="row no-gutters">
+                            <div class="col-xl-4 col-lg-5 col-md-12">					
+                                <div class="msg_search">
+                                    <div class="ui search focus">
+                                        <div class="ui left icon input swdh11 swdh15">
+                                            <input id="searchery" class="prompt srch_explore" type="text" placeholder="Kurs Ara...">
+                                            <i class="uil uil-search-alt icon icon8"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="simplebar-content-wrapper">
+                                    <div class="group_messages">
+                                        {% for sidechat in sidechats%}
+                                        <div class="chat__message__dt">
+                                            <div class="user-status">											
+                                                <div class="user-avatar">
+                                                    <img src="{% if sidechat.chat_image %}{{sidechat.chat_image.url}}{% endif %}" alt="">
+                                                    <!--<div class="msg__badge">2</div>-->
+                                                </div>
+                                                <p class="user-status-title"><span class="bold"><a href="{% url 'room' sidechat.id %}"> {{sidechat.title}}</a></span></p>
+                                                {% if sidechat.last_message%}
+                                                <p id="sidelast" class="user-status-text"> {{chat.last_message}}</p>
+                                                <p id="sidesender" class="user-status-time">{{chat.last_message.user_id.username}} | {{chat.last_message.time}}</p>
+                                                {% else%}
+                                                <p id="sidelast" class="user-status-text"><a style="color:red!important" href="{% url 'room' sidechat.id %}">  Sohbete git</a></p>
+                                                <p id="sidesender" class="user-status-time"></p>
+                                                
+                                                {% endif %}
+                                                <script>
+                                                  //  const roomName = JSON.parse(document.getElementById('room-name').textContent);
+                                            
+                                                    const chatSocketside = new WebSocket(
+                                                        'ws://'
+                                                        + window.location.host
+                                                        + '/ws/chat/group/'
+                                                        + {{sidechat.id}}
+                                                        + '/'
+                                                    );
+                                            
+                                                    chatSocketside.onmessage = function(e) {
+                                                        const data = JSON.parse(e.data);
+                                                        document.querySelector('#sidelast').innerHTML = data.message;                       
+                                                        document.querySelector('#sidesender').innerHTML = data.user + " | " + data.timestamp; };                                            
+                                                    chatSocketside.onclose = function(e) {
+                                                        console.error('Chat socket closed unexpectedly');
+                                                    };
+                                            
+                                                </script>
+                                            
+                                                
+                                                
+                                            </div>
+                                        </div>
+                                        {% endfor%}
+                                    </div>
+                                </div>					
+                            </div>
+                            <div class="col-xl-8 col-lg-7 col-md-12">			
+                                <div class="chatbox_right">
+                                    <div class="chat_header">
+                                        <div class="user-status">											
+                                            <div class="user-avatar">
+                                                <img src="
+                                                {% if basechat.chat_image %}
+                                                {{basechat.chat_image.url}}
+                                                {% endif %}" alt="">
+                                                
+                                            </div>
+                                            <p class="user-status-title"><span class="bold">{{basechat.title}} Hakkında Chat Grubu</span></p>
+                                            <p class="user-status-tag online">Online</p>													
+                                            <!-- <div class="user-status-time floaty eps_dots eps_dots5 more_dropdown">
+                                                
+                                                <a href="#"><i class="uil uil-ellipsis-h"></i></a>
+                                                <div class="dropdown-content">
+                                                    <span><i class="uil uil-trash-alt"></i>Delete</span>
+                                                    <span><i class="uil uil-ban"></i>Block</span>
+                                                    <span><i class="uil uil-windsock"></i>Report</span>															
+                                                    <span><i class="uil uil-volume-mute"></i>Mute</span>
+                                                 </div>																										
+                                            </div>													 -->
+                                        </div>
+                                    </div>
+                                    <div   id="chat-log"  class="messages-line simplebar-content-wrapper2 scrollstyle_4">											
+                                        <div class="mCustomScrollbar">
+                                            {% for basemessage in messages%}
+                                            {% if basemessage.author.id == user.id%}											
+                                            <div style="width: 100%;" class="main-message-box ta-right">
+                                                <div style="float: right;" class="message-dt">
+                                                    <div class="message-inner-dt">
+                                                        <p style="white-space: normal;min-width: 100px;"><a target="_blank" href="{% if basemessage.file %}{{basemessage.file.url}}{% endif %}">{{basemessage.content}}</a></p>
+                                                    </div>
+                                                    <br><!--message-inner-dt end-->
+                                                    <span>{{basemessage.timestamp}}</span>
+                                                </div><!--message-dt end-->
+                                            </div><!--main-message-box end-->
+                                            {% else %}
+                                            <div class="main-message-box st3">
+                                                <div class="message-dt st3">
+                                                    <div class="message-inner-dt">
+                                                        <p style="min-width: 70px;"><a target="_blank" href="{% if basemessage.file %}{{basemessage.file.url}}{% endif %}">{{basemessage.content}}</a></p>
+                                                    </div>
+                                                    <br><!--message-inner-dt end-->
+                                                    <span>{{basemessage.author.username }} | {{ basemessage.timestamp}}</span>
+                                                </div><!--message-dt end-->
+                                            </div><!--main-message-box end-->
+                                            {% endif %}
+                                            {% endfor%}
+                                           
+                                        </div>
+                                    </div>
+                                    <span id="enalt" ></span>
+                                    <div class="message-send-area">
+                                            <div style="margin-bottom: 30px;" class="mf-field">
+                                                <div class="ui search focus input__msg">
+                                                    
+                                                    
+                                                    <div class="ui left icon input swdh19">
+                                                        <input type="hidden" name="chat_id" value="{{ basechat.id}}">
+                                                        <input class="prompt srch_explore" type="text" id="chat-message-input" name="message_body" placeholder="Bu sohbete mesaj gönderin...">
+                                                    </div>
+                                                </div>
+                                                
+                                           
+                                                <button id="chat-message-submit" class="add_msg" type="submit"><i class="uil uil-message"></i></button>
+                                            </div>
+                                         {% if teachman %}
+                                            <div style="margin-top: 20px;" class="col-md-12">
+                                                <h5 >Dosya Gönder</h3>
+                                                <span style="margin-bottom:30px!important" ></span>
+                                            <form style="display:flex;margin-left: -10px;margin-bottom: 10px;" method="post" action="" enctype="multipart/form-data" id="myform">
+                                               <div style="display:flex;">
+                                                <input type="file" id="file" name="file" />
+                                                
+                                                <button type="button" style="float: none;background-color: blueviolet;" id="but_upload"><i class="uil uil-message"></i></button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                            {% endif %}
+                                            {{ basechat.id|json_script:"room-name" }}
+                                        
+                                            <script>
+                                                const messages = document.getElementById('chat-log');
+                        
+                        
+                        function getMessages() {
+                            // Prior to getting your messages.
+                          shouldScroll = messages.scrollTop + messages.clientHeight === messages.scrollHeight;
+                          /*
+                           * Get your messages, we'll just simulate it by appending a new one syncronously.
+                           */
+                        //  appendMessage();
+                          // After getting your messages.
+                          if (!shouldScroll) {
+                            scrollToBottom();
+                          }
+                        }
+                        
+                        function scrollToBottom() {
+                          messages.scrollTop = messages.scrollHeight;
+                        }
+                        
+                        
+                        
+                        
+                        
+                                            </script>
+                                            <script>
+                                                $(document).ready(function() { 
+                                                    getMessages();
+                                                    $("#but_upload").click(function(){
+
+                                                        var fd = new FormData();
+                                                        var files = $('#file')[0].files[0];
+                                                        fd.append('send_file',files);
+                                                        fd.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+                                                        fd.append('chatid', '{{basechat.id}}')
+                                                        $.ajax({
+                                                            url: '{% url "filemessage" %}',
+                                                            type: 'post',
+                                                            data: fd,
+                                                            contentType: false,
+                                                            processData: false,
+                                                            success: function(response){
+                                                                if(response != 0){
+                                                                 
+                                                                }else{
+                                                                    alert('file not uploaded');
+                                                                }
+                                                            },
+                                                        });
+                                                    });
+                                                    function titleCase(str) {
+                                                        var splitStr = str.toLowerCase().split(' ');
+                                                        for (var i = 0; i < splitStr.length; i++) {
+                                                            splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);     
+                                                        }
+                                                      
+                                                        return splitStr.join(' '); 
+                                                     }
+                                                    $('#searchery').keyup(function(){
+ 
+                                                        // Search text
+                                                        var text = titleCase($(this).val());
+                                                       
+                                                        // Hide all content class element
+                                                        $('.chat__message__dt').hide();
+                                                      
+                                                        // Search and show
+                                                        $('.chat__message__dt:contains("'+text+'")').show();
+                                                       
+                                                       });
+                                                });
+                                            </script>
+                                            <script>
+                                                const roomName = JSON.parse(document.getElementById('room-name').textContent);
+                                        
+                                                const chatSocket = new WebSocket(
+                                                    'ws://'
+                                                    + window.location.host
+                                                    + '/ws/chat/group/'
+                                                    + roomName
+                                                    + '/'
+                                                );
+                                        
+                                                chatSocket.onmessage = function(e) {
+                                                    const data = JSON.parse(e.data);
+                                                    if(data.user === '{{user.username}}'){
+                                                    //alert(data.url);
+                                                        if(data.url != NaN){
+                                                        document.querySelector('#chat-log').innerHTML += '<div style="width: 100%;" class="main-message-box ta-right"><div style="float: right;" class="message-dt"><div class="message-inner-dt"><p style="white-space: normal;min-width: 100px;"><a target="_blank" href="'+ data.url +'">' + data.message+'</a></p></div><br><span>'+ 'Siz' + ' | ' +data.timestamp +'</span></div></div>' ; 
+                                                    }   else {
+                                                        document.querySelector('#chat-log').innerHTML += '<div style="width: 100%;" class="main-message-box ta-right"><div style="float: right;" class="message-dt"><div class="message-inner-dt"><p style="white-space: normal;min-width: 100px;">'+ data.message+'</p></div><br><span>'+ 'Siz' + ' | ' +data.timestamp +'</span></div></div>' ;
+                                                    } 
+                                                    
+                                                    getMessages();
+                                                }
+                                                            else{
+                                  
+                                  
+                                                            if(data.url != NaN){
+                                                                document.querySelector('#chat-log').innerHTML += '<div class="main-message-box st3"><div class="message-dt st3"><div class="message-inner-dt"><p style="min-width: 70px;"><a target="_blank" href="'+ data.url +'">' + data.message+'</a></p></div><br><span>'+data.user+' | '+ data.timestamp +'</span></div></div>';    
+                                                            }else{
+                                                                document.querySelector('#chat-log').innerHTML += '<div class="main-message-box st3"><div class="message-dt st3"><div class="message-inner-dt"><p style="min-width: 70px;">'+data.message+'</p></div><br><span>'+data.user+' | '+ data.timestamp +'</span></div></div>';
+                                                            }
+                                                                     
+                                                                            
+                                                                        
+                                  
+                                  
+                                                      
+                                  
+                                                                
+                                                                getMessages();
+                                                            }
+
+                                                        
+                                                       
+                                                    
+                                                    
+                                                };
+                                        
+                                                chatSocket.onclose = function(e) {
+                                                    console.error('Chat socket closed unexpectedly');
+                                                };
+                                        
+                                                document.querySelector('#chat-message-input').focus();
+                                                document.querySelector('#chat-message-input').onkeyup = function(e) {
+                                                    if (e.keyCode === 13) {  // enter, return
+                                                        document.querySelector('#chat-message-submit').click();
+                                                    }
+                                                };
+                                        
+                                                document.querySelector('#chat-message-submit').onclick = function(e) {
+                                                    const messageInputDom = document.querySelector('#chat-message-input');
+                                                    const message = messageInputDom.value;
+                                                    chatSocket.send(JSON.stringify({
+                                                        'message': message,
+                                                        'chatid': '{{basechat.id}}',
+                                                        'userid': {{request.user.id}},
+                                                    }));
+                                                    messageInputDom.value = '';
+                                                };
+                                            </script>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
