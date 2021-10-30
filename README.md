@@ -21,9 +21,11 @@ redis-server
 
 python manage.py runserver 0.0.0.0:8000
 
-## default-creds: 
+## Add superuser: 
 
-th3d1gger:tester
+python manage.py createsuperuser
+
+--Other users can signup with through the interface
 
 ## Finally you need to add chat from admin panel 
 
